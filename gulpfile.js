@@ -1,16 +1,15 @@
-var gulp = require('gulp');
-var pump = require('pump');
-var shell = require('shelljs');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var package = require("./package.json");
+const gulp = require('gulp');
+const pump = require('pump');
+const shell = require('shelljs');
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
 
-var dest = 'build/';
-var layextDir = '/Users/zhanqi/Jianyun/hd/new/ui/ui-static/layext';
-var bundle = package.name + '.min.js';
+const dest = 'build/';
+const shim = 'shim.min.js';
+const extend = 'extend.min.js';
 
-gulp.task('default', function (cb) {
-  // shell.rm('-rf', dest);
+gulp.task('shim', function (cb) {
+  shell.rm('-rf', dest + shim);
 
   pump([
     gulp.src([
@@ -22,24 +21,38 @@ gulp.task('default', function (cb) {
       'node_modules/json3/lib/json3.min.js',
       'node_modules/html5shiv/dist/html5shiv.min.js',
       'node_modules/Respond.js/dest/respond.min.js',
-      'node_modules/qs/dist/qs.js',
-      'node_modules/moment/min/moment.min.js',
-      'node_modules/moment/locale/zh-cn.js',
-      'node_modules/nunjucks/browser/nunjucks.min.js',
+    ]),
+    concat(shim),
+    uglify(),
+    gulp.dest(dest),
+  ], cb);
+});
+
+gulp.task('extend', function (cb) {
+  shell.rm('-rf', dest + extend);
+
+  pump([
+    gulp.src([
       'src/base.js',
       'src/ajax.js',
       'src/tpl.js',
       'src/dialog.js',
       'src/element.js',
       'src/upload.js',
-      'src/table.js'
+      'src/router.js',
+      'src/table.js',
     ]),
-    concat(bundle),
+    concat(extend),
     uglify(),
-    gulp.dest(dest)
+    gulp.dest(dest),
   ], cb);
 });
 
-gulp.task('copy', ['default'], function () {
-  gulp.src(dest + '*.js').pipe(gulp.dest(layextDir))
+gulp.task('copy', ['shim', 'extend'], function () {
+  const macDir = '/Users/zhanqi/Aliyun/ylyn/ylyn-admin/static/';
+  const winDir = '/Users/zhanqi/Jianyun/hd/new/ui/ui-static/layext';
+  const destDir = process.platform === 'darwin' ? macDir : winDir;
+
+  gulp.src(dest + shim).pipe(gulp.dest(destDir + 'shim'));
+  gulp.src(dest + extend).pipe(gulp.dest(destDir + 'extend'));
 });

@@ -1,7 +1,7 @@
 /**
  * 文件上传
  */
-(function ($) {
+(function($) {
 
   var htmlSingle = '<div class="layui-form layui-col-space10" style="margin: 0;">' +
     '<div class="layui-upload-drag layui-col-md6">' +
@@ -53,7 +53,7 @@
     '</div></div>';
 
   // $
-  $.fn.upload = function (action) {
+  $.fn.upload = function(action) {
     var self = $(this);
 
     // render
@@ -83,7 +83,7 @@
   };
 
   // export
-  layext.upload = function (options) {
+  layext.upload = function(options) {
 
     var def = $.Deferred();
 
@@ -98,17 +98,17 @@
       title: '文件上传',
       content: options.multi ? htmlMulti : htmlSingle,
       area: options.multi ? '600px' : '450px',
-      success: function (elem, dialog) {
+      success: function(elem, dialog) {
         var upload = elem.find('.layui-upload-drag').upload({
-          choose: function (obj) {
+          choose: function(obj) {
             // console.log(obj)
           },
-          before: function (obj) {
+          before: function(obj) {
             //  console.log(obj);
 
             layer.load();
           },
-          done: function (json, index, upload) {
+          done: function(json, index, upload) {
             // console.log(json)
 
             layer.closeAll('loading');
@@ -119,18 +119,18 @@
               def.resolve(json.url);
             }
           },
-          error: function (index, upload) {
+          error: function(index, upload) {
             layer.closeAll('loading');
           }
         });
 
-        elem.find('.layui-form').form('event', 'upload', function (e) {
+        elem.find('.layui-form').form('event', 'upload', function(e) {
           upload.data('upload').upload();
         });
       }
     });
 
     return def.promise();
-  }
+  };
 
 })(jQuery);

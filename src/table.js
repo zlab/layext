@@ -1,12 +1,12 @@
 /**
  * 扩展，公共方法
  */
-(function ($) {
+(function($) {
 
   /**
    * 表格
    */
-  $.fn.table = function (action, options) {
+  $.fn.table = function(action, options) {
     var self = $(this);
 
     // id
@@ -22,7 +22,7 @@
     // 绑定事件
     if (action === 'event' && arguments.length === 3) {
       self.data('event-' + arguments[1], arguments[2]);
-      return
+      return;
     }
 
     // reload
@@ -33,12 +33,12 @@
 
     // init
     if (typeof action === 'object') {
-      options = action
+      options = action;
     }
 
     // cols render
-    options.cols.forEach(function (row) {
-      row.forEach(function (item) {
+    options.cols.forEach(function(row) {
+      row.forEach(function(item) {
         var source;
         if (item.template) {
           source = $(item.template).html();
@@ -57,19 +57,19 @@
 
         // render
         if (source) {
-          item.templet = function (data) {
+          item.templet = function(data) {
             return layext.renderString(source, data);
-          }
+          };
         }
-      })
+      });
     });
 
     // done
     if (options.done) {
       var done = options.done;
-      options.done = function () {
-        done.apply(self.siblings('.layui-table-view'), arguments)
-      }
+      options.done = function() {
+        done.apply(self.siblings('.layui-table-view'), arguments);
+      };
     }
 
     options = $.extend({
@@ -101,12 +101,12 @@
     self.data('table', table);
 
     // tool event
-    layui.table.on('tool(' + id + ')', function (obj) {
+    layui.table.on('tool(' + id + ')', function(obj) {
       var callback = self.data('event-' + obj.event);
-      callback && callback(obj.data, obj)
+      callback && callback(obj.data, obj);
     });
 
     // return fn
-    return this
+    return this;
   };
 })(jQuery);

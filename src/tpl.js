@@ -1,14 +1,14 @@
 /**
  * 扩展，公共方法
  */
-(function ($) {
+(function($) {
   var WebLoader = nunjucks.Loader.extend({
     async: true,
-    init: function (opts) {
+    init: function(opts) {
       // init
     },
 
-    getSource: function (name, callback) {
+    getSource: function(name, callback) {
       var url = name;
 
       if (!url.startsWith('/')) {
@@ -25,14 +25,14 @@
       $.ajax(url, {
         type: 'GET',
         dataType: 'html'
-      }).done(function (data, textStatus, jqXHR) {
+      }).done(function(data, textStatus, jqXHR) {
         callback(null, {
           src: data,
           path: name,
           noCache: false
         });
 
-      }).fail(function (jqXHR, textStatus, errorThrown) {
+      }).fail(function(jqXHR, textStatus, errorThrown) {
         callback(errorThrown);
       });
     }
@@ -41,9 +41,9 @@
   var env = new nunjucks.Environment(new WebLoader());
 
   // 覆盖 table laytpl
-  layui.laytpl = function (source) {
+  layui.laytpl = function(source) {
     return {
-      render: function (data) {
+      render: function(data) {
         if (!source) {
           return '';
         }
@@ -63,7 +63,7 @@
     var def = $.Deferred();
 
     // render
-    env.render(template, data || {}, function (err, res) {
+    env.render(template, data || {}, function(err, res) {
       if (err) {
         def.reject(err);
         throw new Error(err);
@@ -88,7 +88,7 @@
     }
 
     // 异步数据渲染
-    return layext.postJSON(url, data).then(function (json) {
+    return layext.postJSON(url, data).then(function(json) {
       if (filter) {
         json = filter(json);
       }
@@ -100,7 +100,7 @@
   /**
    * 日期格式化
    */
-  env.addFilter('date', function (date, format) {
+  env.addFilter('date', function(date, format) {
     if (!date) {
       return '';
     }
@@ -119,14 +119,14 @@
   /**
    * base
    */
-  env.addFilter('base', function (path) {
+  env.addFilter('base', function(path) {
     return layext.path.base + path;
   });
 
   /**
    * 字典
    */
-  env.addFilter('dict', function (value, dictCode) {
+  env.addFilter('dict', function(value, dictCode) {
     if (!value) return '';
 
     var dict = layext.dictList[dictCode];
@@ -138,10 +138,10 @@
   $.extend(layext, {
     nunjucks: env,
     render: render,
-    renderString: function (src, ctx) {
+    renderString: function(src, ctx) {
       return env.renderString(src, ctx);
     },
-    addFilter: function (name, callback) {
+    addFilter: function(name, callback) {
       return env.addFilter(name, callback);
     }
   });

@@ -1,7 +1,7 @@
 /**
  * layext
  */
-(function ($) {
+(function($) {
 
   window.$ = undefined;
 
@@ -14,14 +14,14 @@
       api: '/api',
       upload: '/frame/upload'
     },
-    define: function (module, callback) {
-      layui.define(function (exports) {
+    define: function(module, callback) {
+      layui.define(function(exports) {
         exports(module, callback);
       });
     },
-    require: function (module) {
+    require: function(module) {
       var id = 'scope-' + module.replace(/.+\//, '');
-      layui.use(module, function (callback) {
+      layui.use(module, function(callback) {
         var scope = $('#' + id);
         var form = scope.find('.layui-form:not(.layui-table-view):first');
         var table = scope.find('table:first');
@@ -32,13 +32,13 @@
         });
       });
     },
-    config: function (type, options) {
+    config: function(type, options) {
       var self = this;
       options = options || {};
 
       // 递归
       if (typeof type === 'object') {
-        $.each(type, function (k, v) {
+        $.each(type, function(k, v) {
           self.config(k, v);
         });
         return;
@@ -61,7 +61,7 @@
         // template
         self.nunjucks.addGlobal('baseUrl', self.path.base);
       } else if (type === 'filter') {
-        $.each(options, function (k, v) {
+        $.each(options, function(k, v) {
           self.addFilter(k, v);
         });
       }
