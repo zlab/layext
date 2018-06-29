@@ -15,12 +15,7 @@
         url = '/' + url;
       }
 
-      // 没有后缀
-      if (!url.includes('.')) {
-        url += '.html';
-      }
-
-      url = layext.path.base + '/module' + url;
+      url = layext.path.base + '/module' + url + '.html';
 
       $.ajax(url, {
         type: 'GET',
@@ -83,7 +78,7 @@
    */
   function render(template, url, data, filter) {
     // 本地数据渲染
-    if (url === undefined || typeof url === 'object') {
+    if (!url || typeof url === 'object') {
       return renderData(template, url);
     }
 
