@@ -52,8 +52,6 @@
         btnAlign: 'c',
         scrollbar: false,
         success: function(elem, index) {
-          elem.find('#' + id).addClass('scope-container');
-
           layui.form.render();
         },
         cancel: function() {

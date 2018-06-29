@@ -4,47 +4,16 @@
 (function($) {
 
   var router = {};
-  var routeList = [];
 
   // 当前路由
   router.current = '';
 
-  // beforeEach
-  var beforeCallbacks = [];
-  router.beforeEach = function(callback) {
-    beforeCallbacks.push(callback);
-  };
+  // config
+  router.config = function(options) {
+    router.defaultRoute = options.defaultRoute || '/';
+    router.onChange = options.onChange;
 
-  // afterEach
-  var afterCallbacks = [];
-  router.beforeEach = function(callback) {
-    afterCallbacks.push(callback);
-  };
-
-  // onError
-  var errorCallbacks = [];
-  router.onError = function(callback) {
-    errorCallbacks.push(callback);
-  };
-
-  /**
-   * addRoutes
-   */
-  router.addRoutes = function(routes) {
-    $.each(routes, function(route) {
-      routeList.push({
-        path: path
-      });
-    });
-  };
-
-  /**
-   * addRoute
-   */
-  router.addRoute = function(route) {
-    routeList.push({
-      path: route
-    });
+    $(window).trigger('hashchange');
   };
 
   /**
@@ -58,7 +27,8 @@
    * replace
    */
   router.replace = function(route) {
-    location.href.replace(/#.*/, router.resolve(route));
+    var path = router.resolve(route);
+    location.replace(location.pathname + location.search + path);
   };
 
   /**
@@ -88,20 +58,25 @@
   $(window).on('hashchange', function() {
     var path = location.hash.replace('#', '');
 
-    console.log('change: ' + path);
-
     // root
     if (!path) {
-
+      return router.replace(router.defaultRoute);
     }
 
-    // 路由匹配
-    $.each(routeList, function(route) {
+    var parts = path.split('?');
+    path = parts[0];
 
-    });
+    var query = {};
+    if (parts.length === 2) {
+      query = Qs.parse(parts[1]);
+    }
 
-    router.push('/dasss');
+    router.current = {
+      path: path,
+      query: query
+    };
 
+    router.onChange(router.current);
   });
 
   // export

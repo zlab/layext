@@ -14,13 +14,21 @@
       api: '/api',
       upload: '/frame/upload'
     },
+    pathToId: function(path) {
+      return path.replace(/\//g, '-')
+        .replace(/([A-Z])/g, '-$1')
+        .replace(/^-/, '')
+        .replace(/-$/, '')
+        .replace(/--/, '-')
+        .toLowerCase();
+    },
     define: function(module, callback) {
       layui.define(function(exports) {
         exports(module, callback);
       });
     },
     require: function(module) {
-      var id = 'scope-' + module.replace(/.+\//, '');
+      var id = 'scope-' + this.pathToId(module);
       layui.use(module, function(callback) {
         var scope = $('#' + id);
         var form = scope.find('.layui-form:not(.layui-table-view):first');

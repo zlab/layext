@@ -8,7 +8,7 @@ const dest = 'build/';
 const shim = 'shim.min.js';
 const extend = 'extend.min.js';
 
-gulp.task('shim', function (cb) {
+gulp.task('shim', function(cb) {
   shell.rm('-rf', dest + shim);
 
   pump([
@@ -20,15 +20,15 @@ gulp.task('shim', function (cb) {
       'node_modules/es6-shim/es6-sham.min.js',
       'node_modules/json3/lib/json3.min.js',
       'node_modules/html5shiv/dist/html5shiv.min.js',
-      'node_modules/Respond.js/dest/respond.min.js',
+      'node_modules/Respond.js/dest/respond.min.js'
     ]),
     concat(shim),
     uglify(),
-    gulp.dest(dest),
+    gulp.dest(dest)
   ], cb);
 });
 
-gulp.task('extend', function (cb) {
+gulp.task('extend', function(cb) {
   shell.rm('-rf', dest + extend);
 
   pump([
@@ -40,17 +40,18 @@ gulp.task('extend', function (cb) {
       'src/element.js',
       'src/upload.js',
       'src/router.js',
-      'src/table.js',
+      'src/table.js'
     ]),
     concat(extend),
     uglify(),
-    gulp.dest(dest),
+    gulp.dest(dest)
   ], cb);
 });
 
-gulp.task('copy', ['shim', 'extend'], function () {
-  const macDir = '/Users/zhanqi/Aliyun/ylyn/ylyn-admin/static/';
-  const winDir = '/Users/zhanqi/Jianyun/hd/new/ui/ui-static/layext';
+gulp.task('copy', ['shim', 'extend'], function() {
+  const ylynPath = 'ylyn/ylyn-admin/static/';
+  const macDir = '/Users/zhanqi/Aliyun/' + ylynPath;
+  const winDir = 'D:/Aliyun/' + ylynPath;
   const destDir = process.platform === 'darwin' ? macDir : winDir;
 
   gulp.src(dest + shim).pipe(gulp.dest(destDir + 'shim'));
